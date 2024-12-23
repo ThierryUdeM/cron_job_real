@@ -1,5 +1,3 @@
-install.packages(c("AzureStor", "readr"), repos="https://cran.rstudio.com")
-
 library(AzureStor)
 library(readr)
 
