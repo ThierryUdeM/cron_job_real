@@ -1,9 +1,9 @@
 name: Run R Script with Azure Secrets
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Allow manual trigger
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/5 * * * *' # Run every 5 minutes
 
 jobs:
   run-r-script:
@@ -13,20 +13,19 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+
     - name: Setup R
       uses: r-lib/actions/setup-r@v2
       with:
         r-version: '4.3'
 
-    - name: Install system dependencies
+    - name: Install R Packages
       run: |
-        sudo apt-get update
-        sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
-
-    - name: Install R package dependencies
-      run: |
-        Rscript -e 'install.packages("remotes", repos="https://cran.rstudio.com")'
-        Rscript -e 'remotes::install_cran(c("AzureStor", "readr"), dependencies=TRUE)'
+        Rscript -e 'install.packages(c("AzureStor", "readr"), repos = "https://cran.rstudio.com")'
 
     - name: Pass Azure Secrets to R
       env:
@@ -34,6 +33,7 @@ jobs:
         AZURE_CONTAINER_NAME: ${{ secrets.AZURE_CONTAINER_NAME }}
         AZURE_ACCESS_KEY: ${{ secrets.AZURE_ACCESS_KEY }}
       run: |
+        # Dynamically create a .Renviron file
         echo "AZURE_STORAGE_ACCOUNT=${AZURE_STORAGE_ACCOUNT}" >> .Renviron
         echo "AZURE_CONTAINER_NAME=${AZURE_CONTAINER_NAME}" >> .Renviron
         echo "AZURE_ACCESS_KEY=${AZURE_ACCESS_KEY}" >> .Renviron
