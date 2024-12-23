@@ -18,6 +18,10 @@ jobs:
       with:
         r-version: '4.3'
 
+    - name: Install R packages
+      run: |
+        Rscript -e 'install.packages(c("AzureStor", "readr"), repos="https://cran.rstudio.com")'
+
     - name: Pass Azure Secrets to R
       env:
         AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
@@ -29,5 +33,5 @@ jobs:
         echo "AZURE_CONTAINER_NAME=${AZURE_CONTAINER_NAME}" >> .Renviron
         echo "AZURE_ACCESS_KEY=${AZURE_ACCESS_KEY}" >> .Renviron
 
-        # Run the R script
-        Rscript cron_job.R
+    - name: Run R script
+      run: Rscript cron_job.R
