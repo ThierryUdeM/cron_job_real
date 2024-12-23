@@ -9,4 +9,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Print Time
-      run: echo "Current time: $(date)"
+      run: |
+        echo "Current time: $(date)"
