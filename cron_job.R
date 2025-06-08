@@ -16,6 +16,9 @@ container <- blob_container(endpoint, container_name)
 
 #2. Télécharger données brutes companies
 data <- storage_read_csv(container, 'ecosense.csv')
+data_2 <- storage_read_csv(container, 'ecosense_1.csv')
+data <- bind_rows(data,data_2)
+data <- na.omit(data)
 saveRDS(data, "file.rds")
 
 upload_blob(container, "file.rds", dest = "ecosense.rds")
