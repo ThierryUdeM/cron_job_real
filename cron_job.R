@@ -1,6 +1,6 @@
 library(AzureStor)
 library(readr)
-library(dyplr)
+library(dplyr)
 storage_account_name <- Sys.getenv("AZURE_STORAGE_ACCOUNT")
 container_name <- Sys.getenv("AZURE_CONTAINER_NAME")
 access_key <- Sys.getenv("AZURE_ACCESS_KEY")
