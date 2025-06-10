@@ -19,7 +19,7 @@ container <- blob_container(endpoint, container_name)
 data <- storage_read_csv(container, 'ecosense.csv')
  
 
-if(nrow(data)>45000){
+if(nrow(data)>25000){
   blobs <- list_blobs(container)
   existing_files <- blobs$name[grepl(paste0("ecosense", "_\\d+\\.csv$"), blobs$name)]
   latest_num <- ifelse(length(existing_files) == 0, 0, 
