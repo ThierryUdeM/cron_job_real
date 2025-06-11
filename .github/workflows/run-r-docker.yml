@@ -34,7 +34,7 @@ jobs:
 
     - name: Install R Packages
       run: |
-        Rscript -e 'install.packages(c("AzureStor", "readr","dplyr"), repos = "https://cran.rstudio.com")'
+        Rscript -e 'install.packages(c("AzureStor", "readr","dplyr","lubridate","geosphere"), repos = "https://cran.rstudio.com")'
 
     - name: Pass Azure Secrets to R
       env:
