@@ -3,6 +3,7 @@ library(readr)
 library(dplyr)
 library(lubridate)
 library(geosphere)
+library(dbscan)
 
 #I - Download Data
   storage_account_name <- Sys.getenv("AZURE_STORAGE_ACCOUNT")
@@ -62,17 +63,24 @@ library(geosphere)
   all_data <- lapply(relevant_csvs, function(csv) {
     message(sprintf("Reading: %s", csv))
     tryCatch({
-      # Download blob to temp file
       tmp_file <- tempfile(fileext = ".csv")
       download_blob(container, src = csv, dest = tmp_file, overwrite = TRUE)
       
-      # Read CSV locally
       df <- read_csv(tmp_file)
       df <- clean_names(df)
       
-      # Clean up: optional — delete tmp file after reading
-      unlink(tmp_file)
+      # Convert latitude column to numeric, suppress warnings for coercion
+      lat_col <- "Latitude (DDMM.MMMM)"
+      if (lat_col %in% names(df)) {
+        df[[lat_col]] <- suppressWarnings(as.numeric(df[[lat_col]]))
+      }
       
+      # Hardcode Latitude for EcoSense ID 17
+      if ("EcoSense ID" %in% names(df) && lat_col %in% names(df)) {
+        df[[lat_col]][df$`EcoSense ID` == 17] <- 4529.876
+      }
+      
+      unlink(tmp_file)
       return(df)
     }, error = function(e) {
       warning(sprintf("Failed to read %s: %s", csv, e$message))
@@ -81,7 +89,8 @@ library(geosphere)
   }) %>%
     Filter(Negate(is.null), .) %>%
     bind_rows() %>%
-    na.omit()
+     na.omit()
+  
   
   data <- unique(all_data)
 
