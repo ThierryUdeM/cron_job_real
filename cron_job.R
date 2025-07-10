@@ -155,10 +155,10 @@ library(dbscan)
     data_admin <- na.omit(data_admin)
   
     #SPJD
-    data_spjd <- data %>% filter(`EcoSense ID` %in% c(9, 17, 18,19,20,13:16))
+    data_spjd <- data %>% filter(`EcoSense ID` %in% c(5,6,7,9, 17, 18,19,20,13:16))
     data_spjd <- data_spjd %>% filter(`Date/Time`>=as.Date('2025-06-06'))
     
-    data_clean <- data_spjd %>% filter(`EcoSense ID` %in% c(9, 17, 18,19,20))
+    data_clean <- data_spjd %>% filter(`EcoSense ID` %in% c(5,6,7,9, 17, 18,19,20))
     data_full<- data_spjd %>% filter(`EcoSense ID` %in% c(13:16))
     
     #A. For fixe module - 10 min
