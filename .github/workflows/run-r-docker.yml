@@ -3,7 +3,7 @@ name: Run R Script with Azure Secrets
 on:
   workflow_dispatch: # Allow manual trigger
   schedule:
-    - cron: '*/15 * * * *' # Run every 5 minutes
+    - cron: '0 0 * * *'  # Run at 00:00 (midnight) UTC every day
 
 jobs:
   run-r-script:
